@@ -34,11 +34,22 @@ function WhiteBoardCanvas({ color = '#000000', thickness = 2, eraser = false }) 
       let drawing = false;
       let lastX = null;
       let lastY = null;
+      // Variables para color, grosor y borrador
+      let currentColor = color;
+      let currentThickness = thickness;
+      let eraserMode = eraser;
 
       // Dibuja el canvas
       p.setup = () => {
         p.createCanvas(800, 500).parent(canvasRef.current);
         p.background(255);
+      };
+
+      // Actualiza las variables si cambian los props
+      p.updateProps = () => {
+        currentColor = color;
+        currentThickness = thickness;
+        eraserMode = eraser;
       };
 
       // Cuando el mouse se presiona, comienza a dibujar
@@ -57,13 +68,15 @@ function WhiteBoardCanvas({ color = '#000000', thickness = 2, eraser = false }) 
 
       // Se ejecuta muchas veces por segundo
       p.draw = () => {
+        // Actualiza las variables de props
+        p.updateProps();
         // Solo envía y dibuja el trazo si el mouse está presionado y dentro del canvas
         if (drawing && p.mouseX >= 0 && p.mouseX <= 800 && p.mouseY >= 0 && p.mouseY <= 500) {
           // Determina el color y grosor
-          const strokeColor = eraser ? 255 : color;
+          const strokeColor = eraserMode ? 255 : currentColor;
           // Dibuja la línea localmente
           p.stroke(strokeColor);
-          p.strokeWeight(thickness);
+          p.strokeWeight(currentThickness);
           p.line(lastX, lastY, p.mouseX, p.mouseY);
           // Envía el trazo al backend para que todos los usuarios lo dibujen
           sendDrawEvent({
@@ -72,7 +85,7 @@ function WhiteBoardCanvas({ color = '#000000', thickness = 2, eraser = false }) 
             toX: p.mouseX,
             toY: p.mouseY,
             color: strokeColor,
-            thickness,
+            thickness: currentThickness,
           });
           lastX = p.mouseX;
           lastY = p.mouseY;
