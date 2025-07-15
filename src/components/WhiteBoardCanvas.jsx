@@ -102,12 +102,15 @@ function WhiteBoardCanvas({ color = '#000000', thickness = 2, eraser = false }) 
         stompClient.current.subscribe('/topic/pizarra', (message) => {
           const drawData = JSON.parse(message.body);
           // Si el mensaje es de tipo 'clear', borra el canvas
-          if (drawData.type === 'clear') {
+          if (drawData && drawData.type === 'clear') {
             if (p5Instance.current) {
               p5Instance.current.clearCanvas();
             }
-          } else if (p5Instance.current && drawData) {
-            p5Instance.current.externalDraw(drawData);
+          } else if (drawData && typeof drawData.fromX === 'number' && typeof drawData.fromY === 'number') {
+            // Solo dibuja si el mensaje es un trazo válido
+            if (p5Instance.current) {
+              p5Instance.current.externalDraw(drawData);
+            }
           }
         });
       },
