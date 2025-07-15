@@ -57,15 +57,11 @@ function WhiteBoardCanvas({ color = '#000000', thickness = 2, eraser = false }) 
 
       // Se ejecuta muchas veces por segundo
       p.draw = () => {
-        // Solo dibuja si el mouse está presionado y dentro del canvas
+        // Solo envía el trazo si el mouse está presionado y dentro del canvas
         if (drawing && p.mouseX >= 0 && p.mouseX <= 800 && p.mouseY >= 0 && p.mouseY <= 500) {
           // Determina el color y grosor
           const strokeColor = eraser ? 255 : color;
-          p.stroke(strokeColor);
-          p.strokeWeight(thickness);
-          // Dibuja la línea localmente
-          p.line(lastX, lastY, p.mouseX, p.mouseY);
-          // Envía el trazo al backend para que otros usuarios lo reciban
+          // Envía el trazo al backend para que todos los usuarios lo dibujen
           sendDrawEvent({
             fromX: lastX,
             fromY: lastY,
