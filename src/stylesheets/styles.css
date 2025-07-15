@@ -1,0 +1,44 @@
+.whiteboard-container {
+  border: 2px solid #333;
+  width: 800px;
+  height: 500px;
+  position: relative;
+  margin: 20px 0;
+  align-items: center;
+}
+
+.board-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0px;
+  width: 100vw;
+  min-height: 100vh;
+  background: #f7f7f7;
+}
+
+.toolbar-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background-color: #fff;
+  padding: 18px 24px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  align-items: flex-start;
+}
+
+.whiteboard-button {
+  margin-top: 16px;
+  padding: 8px 18px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: none;
+  background: #333;
+  color: #fff;
+  cursor: pointer;
+}
+.whiteboard-button:hover {
+  background: #555;
+}
