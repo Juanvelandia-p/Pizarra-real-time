@@ -17,7 +17,7 @@ import '../stylesheets/styles.css';
  *   - eraser: modo borrador
  */
 // URL del backend Spring Boot desplegado en Azure
-const SOCKET_URL = 'https://pizarrawebsocket-back-g9avhaeba6e0efcu.brazilsouth-01.azurewebsites.net/ws';
+const SOCKET_URL = 'https://pizarra-realtime-back-eyfwdefuhtbdbmg5.brazilsouth-01.azurewebsites.net/ws';
 
 function WhiteBoardCanvas({ color = '#000000', thickness = 2, eraser = false }) {
   // Referencia al div donde p5.js insertará el canvas
