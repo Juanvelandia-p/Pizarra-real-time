@@ -101,8 +101,12 @@ function WhiteBoardCanvas({ color = '#000000', thickness = 2, eraser = false }) 
         // Se suscribe al canal de la pizarra
         stompClient.current.subscribe('/topic/pizarra', (message) => {
           const drawData = JSON.parse(message.body);
-          // Dibuja la línea recibida en el canvas
-          if (p5Instance.current && drawData) {
+          // Si el mensaje es de tipo 'clear', borra el canvas
+          if (drawData.type === 'clear') {
+            if (p5Instance.current) {
+              p5Instance.current.clearCanvas();
+            }
+          } else if (p5Instance.current && drawData) {
             p5Instance.current.externalDraw(drawData);
           }
         });
@@ -133,12 +137,18 @@ function WhiteBoardCanvas({ color = '#000000', thickness = 2, eraser = false }) 
     }
   };
 
-  // Borra el canvas localmente y (opcional) podrías emitir un evento para que otros borren
+  // Borra el canvas localmente y emite un evento para que todos los clientes borren
   const handleClearCanvas = () => {
     if (p5Instance.current) {
       p5Instance.current.clearCanvas();
     }
-    // Si quieres que todos borren, puedes emitir un evento especial aquí
+    // Envía un evento especial de borrado a todos los clientes
+    if (stompClient.current?.connected) {
+      stompClient.current.publish({
+        destination: '/app/draw',
+        body: JSON.stringify({ type: 'clear' }),
+      });
+    }
   };
 
   /**
